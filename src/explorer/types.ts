@@ -20,11 +20,6 @@ export class AuthorDataItem {
     }
 }
 
-export type AuthorStatusData = {
-    author: string;
-    status: boolean;
-};
-
 export const IAuthorTreeViewProvider = Symbol('IAuthorTreeViewProvider');
 export interface IAuthorTreeViewProvider extends TreeDataProvider<AuthorDataItem> {
     onDidChangeTreeData: Event<AuthorDataItem | undefined>;

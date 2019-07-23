@@ -4,8 +4,9 @@
 'use strict';
 
 import { Event, EventEmitter } from 'vscode';
-import { IAuthorTreeViewProvider, IDisposable, AuthorDataItem, AuthorStatusData } from './types';
+import { IAuthorTreeViewProvider, IDisposable, AuthorDataItem } from './types';
 import { AuthorTreeItem } from './authorTreeViewItem';
+import { AuthorModelService } from '../authorModel/authorModelService';
 
 export class AuthorTreeViewProvider implements IAuthorTreeViewProvider, IDisposable {
     public static getInstance(): AuthorTreeViewProvider {
@@ -22,7 +23,7 @@ export class AuthorTreeViewProvider implements IAuthorTreeViewProvider, IDisposa
 
     constructor() {
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
-        // this.disposables.push(this.authorService.onDidStatusChange(this.onAuthorStatusChanged, this));
+        this.disposables.push(AuthorModelService.getInstance().onDidAuthorModelChange(this.onAuthorStatusChanged, this));
     }
 
     /**
@@ -48,24 +49,11 @@ export class AuthorTreeViewProvider implements IAuthorTreeViewProvider, IDisposa
      * As our tree contains no child notes, this returns roots of the tree
      */
     public async getChildren(): Promise<AuthorDataItem[]> {
-        const author1 = {
-            name: 'Kartik Raj',
-            email: 'kartikr@microsoft.com',
-            status: true
-        };
-        const author2 = {
-            name: 'Paras Jindal',
-            email: 'paras@microsoft.com',
-            status: false
-        };
-        const author3 = {
-            name: 'Ritvik Raj',
-            email: 'ritvik@microsoft.com',
-            status: true
-        };
-        return [new AuthorDataItem(author1), new AuthorDataItem(author2), new AuthorDataItem(author3)];
+        return AuthorModelService.getInstance().authorsList
+            .map(author => new AuthorDataItem(author));
     }
 
-    private onAuthorStatusChanged(e: AuthorStatusData) {
+    private onAuthorStatusChanged() {
+        this._onDidChangeTreeData.fire();
     }
 }
