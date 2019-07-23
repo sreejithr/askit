@@ -10,14 +10,52 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
-			"command": "extension.helloWorld",
-			"title": "Hello World"
-		}]
+		"commands": [
+			{
+				"command": "extension.helloWorld",
+				"title": "Hello World"
+			},
+			{
+				"command": "askIt.chat",
+				"title": "Chat with authors of the selected code",
+				"category": "AskIt",
+				"icon": {
+					"light": "resources/light/chat.svg",
+					"dark": "resources/dark/chat.svg"
+				}
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "askIt.chat",
+					"when": "view == chat_authors",
+					"group": "navigation@1"
+				}
+			]
+		},
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "chat-explorer",
+					"title": "TEAMS CHAT",
+					"icon": "resources/teams.svg"
+				}
+			]
+		},
+		"views": {
+			"chat-explorer": [
+				{
+					"id": "chat_authors",
+					"name": "AUTHORS",
+					"when": "askItExtensionActivated"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
