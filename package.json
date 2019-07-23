@@ -10,7 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -18,8 +18,26 @@
 			{
 				"command": "extension.helloWorld",
 				"title": "Hello World"
+			},
+			{
+				"command": "askIt.chat",
+				"title": "Chat with authors of the selected code",
+				"category": "AskIt",
+				"icon": {
+					"light": "resources/light/chat.svg",
+					"dark": "resources/dark/chat.svg"
+				}
 			}
 		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "askIt.chat",
+					"when": "view == chat_authors",
+					"group": "navigation@1"
+				}
+			]
+		},
 		"viewsContainers": {
 			"activitybar": [
 				{

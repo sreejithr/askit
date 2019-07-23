@@ -12,36 +12,41 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "askit" is now active!');
 
-	vscode.commands.executeCommand('setContext', 'askItExtensionActivated', true).then(()=>{});
-	
+	vscode.commands.executeCommand('setContext', 'askItExtensionActivated', true).then(() => { });
+
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
 
+	let disposable = vscode.commands.registerCommand('askIt.chat', async () => {
+
+		const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
+		const selectedAuthors = authorNodes.filter(author => author.status === true);
 		// Display a message box to the user
 		const panel = vscode.window.createWebviewPanel(
-      "chatPanel",
-      "Chat",
-      vscode.ViewColumn.Beside,
-      {
-        enableScripts: true,
+			"chatPanel",
+			"Chat",
+			{
+				viewColumn: vscode.ViewColumn.Beside,
+				preserveFocus: true
+			},
+			{
+				enableScripts: true,
 				retainContextWhenHidden: true,
 				portMapping: [{
 					extensionHostPort: 80,
 					webviewPort: 80
 				}],
-      }
+			}
 		);
 		panel.webview.html = webViewContent;
 	});
 
 	context.subscriptions.push(disposable);
 
-	const treeView = vscode.window.createTreeView('chat_authors', { showCollapseAll: true, treeDataProvider: new AuthorTreeViewProvider() });
+	const treeView = vscode.window.createTreeView('chat_authors', { showCollapseAll: true, treeDataProvider: AuthorTreeViewProvider.getInstance() });
 	context.subscriptions.push(treeView);
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

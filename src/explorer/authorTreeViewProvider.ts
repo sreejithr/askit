@@ -8,6 +8,14 @@ import { IAuthorTreeViewProvider, IDisposable, AuthorDataItem, AuthorStatusData 
 import { AuthorTreeItem } from './authorTreeViewItem';
 
 export class AuthorTreeViewProvider implements IAuthorTreeViewProvider, IDisposable {
+    public static getInstance(): AuthorTreeViewProvider {
+        if (!this.instance) {
+            this.instance = new AuthorTreeViewProvider();
+        }
+        return this.instance;
+    }
+
+    private static instance: AuthorTreeViewProvider;
     public readonly onDidChangeTreeData: Event<AuthorDataItem | undefined>;
     private _onDidChangeTreeData = new EventEmitter<AuthorDataItem | undefined>();
     private disposables: IDisposable[] = [];
@@ -37,20 +45,23 @@ export class AuthorTreeViewProvider implements IAuthorTreeViewProvider, IDisposa
     }
 
     /**
-     * Get roots of the tree
+     * As our tree contains no child notes, this returns roots of the tree
      */
     public async getChildren(): Promise<AuthorDataItem[]> {
         const author1 = {
-            name: 'Kartik',
-            email: 'kartikr@microsoft.com'
+            name: 'Kartik Raj',
+            email: 'kartikr@microsoft.com',
+            status: true
         };
         const author2 = {
-            name: 'Paras',
-            email: 'paras@microsoft.com'
+            name: 'Paras Jindal',
+            email: 'paras@microsoft.com',
+            status: false
         };
         const author3 = {
-            name: 'Ritvik',
-            email: 'ritvik@microsoft.com'
+            name: 'Ritvik Raj',
+            email: 'ritvik@microsoft.com',
+            status: true
         };
         return [new AuthorDataItem(author1), new AuthorDataItem(author2), new AuthorDataItem(author3)];
     }

@@ -4,15 +4,18 @@ import { TreeDataProvider, Event } from "vscode";
 export type AuthorData = {
     name: string;
     email?: string;
+    status?: boolean;
 };
 
 export class AuthorDataItem {
-    public hasAuthoredSelectedLines?: boolean;
-    constructor(public readonly author: AuthorData) { }
+    public status?: boolean;
+    constructor(public readonly author: AuthorData) {
+        this.status = author.status;
+    }
     public get name(): string {
         return this.author.name;
     }
-    public get email(): string|undefined {
+    public get email(): string | undefined {
         return this.author.email;
     }
 }

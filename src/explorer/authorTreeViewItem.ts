@@ -2,6 +2,8 @@
 
 import { ThemeIcon, TreeItem, TreeItemCollapsibleState, Uri } from 'vscode';
 import { AuthorDataItem } from './types';
+import { getIcon } from './icons';
+import { Icons } from './constants';
 
 /**
  * Class that represents a visual node on the
@@ -17,14 +19,30 @@ export class AuthorTreeItem extends TreeItem {
     }
 
     public get iconPath(): string | Uri | { light: string | Uri; dark: string | Uri } | ThemeIcon {
-        return ThemeIcon.Folder;
+        if (!this.data) {
+            return '';
+        }
+        const status = this.data.status;
+        if (status) {
+            return getIcon(Icons.selectedUser);
+        } else {
+            return getIcon(Icons.normalUser);
+        }
     }
 
     public get tooltip(): string {
-        return 'Loading...';
+        if (!this.data) {
+            return '';
+        }
+        const status = this.data.status;
+        if (status) {
+            return 'Has authored the selected lines';
+        } else {
+            return 'Did not author the selected lines';
+        }
     }
 
     private setCommand() {
-        this.command = { command: 'extension.helloWorld', title: 'Open', arguments: [this.data] };
+        this.command = { command: 'askIt.chat', title: 'Open', arguments: [this.data] };
     }
 }
