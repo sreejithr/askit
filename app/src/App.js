@@ -1,8 +1,10 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { ChatService } from "@msteams/services-chat";
 
 function App() {
+  console.log(">>>", ChatService);
   return (
     <div className="App">
       <header className="App-header">
