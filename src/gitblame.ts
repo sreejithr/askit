@@ -1,10 +1,8 @@
-
-
 export class GitBlame {
 
     private _blamed: Object;
 
-    constructor(private repoPath: string, private gitBlameProcess) {
+    constructor(private repoPath: string, private gitBlameProcess: any) {
         this._blamed = {};
     }
 
@@ -14,13 +12,13 @@ export class GitBlame {
 
             if (self.needsBlame(fileName)) {
                 self.blameFile(self.repoPath, fileName).then((blameInfo) => {
-                    self._blamed[fileName] = blameInfo;
+                    (self._blamed as any)[fileName] = blameInfo;
                     resolve(blameInfo);
                 }, (err) => {
-                    reject();
+                    reject(err);
                 });
             } else {
-                resolve(self._blamed[fileName]);
+                resolve((self._blamed as any)[fileName]);
             }
         });
     }
@@ -39,14 +37,14 @@ export class GitBlame {
 
             self.gitBlameProcess(repo, {
                 file: fileName
-            }).on('data', (type, data) => {
+            }).on('data', (type: any, data: any) => {
                 // outputs in Porcelain format.
                 if (type === 'line') {
-                    blameInfo['lines'][data.finalLine] = data;
+                    (blameInfo as any)['lines'][data.finalLine] = data;
                 } else if (type === 'commit' && !(data.hash in blameInfo['commits'])) {
-                    blameInfo['commits'][data.hash] = data;
+                    (blameInfo as any)['commits'][data.hash] = data;
                 }
-            }).on('error', (err) => {
+            }).on('error', (err: any) => {
                 reject(err);
             }).on('end', () => {
                 resolve(blameInfo);
