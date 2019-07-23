@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { IDisposable, AuthorData } from '../explorer/types';
-import { GitBlame } from '../gitBlame/gitblame';
+import { GitBlame } from '../gitblame';
 
 const gitBlameShell = require('git-blame');
 

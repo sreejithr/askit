@@ -4,7 +4,6 @@ import * as vscode from 'vscode';
 import webViewContent from "./getWebView";
 import { AuthorTreeViewProvider } from './explorer/authorTreeViewProvider';
 import { AuthorModelService } from './authorModel/authorModelService';
-import { GitBlameExtension } from './gitBlame/extension';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -50,8 +49,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(treeView);
 
 	AuthorModelService.getInstance().registerHandlers();
-
-	GitBlameExtension.getInstance().activate();
 }
 
 // this method is called when your extension is deactivated
