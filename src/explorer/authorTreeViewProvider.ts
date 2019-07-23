@@ -3,12 +3,10 @@
 
 'use strict';
 
-import { injectable } from 'inversify';
 import { Event, EventEmitter } from 'vscode';
 import { IAuthorTreeViewProvider, IDisposable, AuthorDataItem, AuthorStatusData } from './types';
 import { AuthorTreeItem } from './authorTreeViewItem';
 
-@injectable()
 export class AuthorTreeViewProvider implements IAuthorTreeViewProvider, IDisposable {
     public readonly onDidChangeTreeData: Event<AuthorDataItem | undefined>;
     private _onDidChangeTreeData = new EventEmitter<AuthorDataItem | undefined>();
