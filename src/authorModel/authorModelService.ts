@@ -23,7 +23,6 @@ export class AuthorModelService {
     public registerHandlers() {
         this.disposables.push(vscode.window.onDidChangeActiveTextEditor(this.updateModel, this));
         this.disposables.push(vscode.window.onDidChangeTextEditorSelection(() => this.updateModel()));
-
     }
 
     public dispose() {
@@ -57,16 +56,14 @@ export class AuthorModelService {
             }
             else {
                 const editor = vscode.window.activeTextEditor;
-
-                if (!editor) {
-                    return;
-                }
                 const lineRange = this.getLineNumberRange(editor);
                 if (!lineRange) {
+                    this.authorsList = [];
+                    this._onDidAuthorModelChange.fire();
                     return;
                 }
                 const gitBlame = new GitBlame(repoPath, gitBlameShell);
-                const file = path.relative(repoDir, editor.document.fileName);
+                const file = path.relative(repoDir, editor!.document.fileName);
 
                 gitBlame.getBlameInfo(file).then((info) => {
                     this.authorsList = [];
@@ -96,13 +93,20 @@ export class AuthorModelService {
         });
     }
 
-    private getLineNumberRange(editor: vscode.TextEditor) {
-
-        if (editor) {
-            const start = editor.selections[0].start.line + 1;
-            const end = editor.selections[0].end.line + 1;
-            return [start, end];
+    private getLineNumberRange(editor: vscode.TextEditor | undefined) {
+        if (!editor) {
+            return;
         }
+        const doc = editor.document;
+        if (!doc) {
+            return;
+        }
+        if (doc.isUntitled) {
+            return;
+        }
+        const start = editor.selections[0].start.line + 1;
+        const end = editor.selections[0].end.line + 1;
+        return [start, end];
     }
 
 }

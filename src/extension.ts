@@ -15,10 +15,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.executeCommand('setContext', 'askItExtensionActivated', true).then(() => { });
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-
 	let disposable = vscode.commands.registerCommand('askIt.chat', async () => {
 
 		const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
@@ -45,10 +41,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 
-	const treeView = vscode.window.createTreeView('chat_authors', { showCollapseAll: true, treeDataProvider: AuthorTreeViewProvider.getInstance() });
+	const treeDataProvider = AuthorTreeViewProvider.getInstance();
+	const treeView = vscode.window.createTreeView('chat_authors', { showCollapseAll: true, treeDataProvider });
 	context.subscriptions.push(treeView);
+	context.subscriptions.push(treeDataProvider);
 
-	AuthorModelService.getInstance().registerHandlers();
+	const authorModelService = AuthorModelService.getInstance();
+	authorModelService.registerHandlers();
+	context.subscriptions.push(authorModelService);
 }
 
 // this method is called when your extension is deactivated
