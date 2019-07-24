@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}],
 			}
 		);
-		panel.webview.html = webViewContent;
+		panel.webview.html = webViewContent();
 	});
 
 	context.subscriptions.push(disposable);
