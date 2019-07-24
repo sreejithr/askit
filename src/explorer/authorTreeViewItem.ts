@@ -36,9 +36,9 @@ export class AuthorTreeItem extends TreeItem {
         }
         const status = this.data.status;
         if (status) {
-            return 'Has authored the selected lines';
+            return 'Contributed to the selected code';
         } else {
-            return 'Did not author the selected lines';
+            return 'Did not contribute to the selected code';
         }
     }
 

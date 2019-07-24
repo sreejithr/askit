@@ -43,7 +43,7 @@
 				{
 					"id": "chat-explorer",
 					"title": "TEAMS CHAT",
-					"icon": "resources/teams.svg"
+					"icon": "resources/MS_Teams.svg"
 				}
 			]
 		},
@@ -73,6 +73,10 @@
 		"mocha": "^6.1.4",
 		"typescript": "^3.3.1",
 		"tslint": "^5.12.1",
-		"vscode-test": "^1.0.0-next.0"
+		"vscode-test": "^1.0.0-next.0",
+		"git-blame": "^0.1.1",
+		"moment": "^2.10.6",
+		"path": "^0.12.7",
+		"vscode": "0.11.x"
 	}
 }
