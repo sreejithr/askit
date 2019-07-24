@@ -1,9 +1,6 @@
 import React from 'react';
-import { ChatService } from "@msteams/services-chat";
-import { Chat, Avatar, Provider, themes, Flex, Button, Input } from "@stardust-ui/react";
-import { send } from "@msteams/services-transport";
-import { SettingsUtilities } from "@msteams/services-settings";
 import './App.css';
+import { Chat, Avatar, Provider, themes, Flex  } from "@stardust-ui/react";
 import { getServices } from "./getServices";
 
 const items = [
@@ -54,18 +51,11 @@ const items = [
   },
 ];
 
-function App() {
-  const convId = "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces";
-  const { settingsService, gtmRegistry } = getServices();
-  const settingsUtils = new SettingsUtilities(settingsService);
-  const chatService = new ChatService(
-    gtmRegistry.bind(send, "chatService"),
-    settingsUtils
-  );
-  const message = {
+function generateMessage(text) {
+  return {
     messagetype: "RichText/Html",
     contenttype: "text",
-    content: "<p>test</p>",
+    content: `<p>${text}</p>`,
     imdisplayname: "Sreejith Ramakrishnan",
     clientmessageid: Math.floor(Math.random() * 10551863936860307670).toString(),
     properties: {
@@ -75,17 +65,26 @@ function App() {
       files: "[]"
     }
   }
-  const sendMsg = () => chatService.postMessageToConversation(convId, message);
+}
+
+function App() {
+  const convId = "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces";
+  const { chatService } = getServices();
+  
+  const onPostMessage = event => sendMessage(event.data);
+  const sendMessage = messageText => chatService.postMessageToConversation(convId, generateMessage(messageText));
+
+  if (window.addEventListener) {
+    window.addEventListener("message", onPostMessage, false);
+  } else {
+    window.attachEvent("onmessage", onPostMessage);
+  }
   return (
     <Provider theme={themes.teamsDark}>
-      <Flex column style={{ height: '100vh', width: '100vw' }}>
+      <Flex column style={{ height: '95vh', width: '93vw' }}>
         <Flex.Item grow>
           <Chat items={items} />
         </Flex.Item>
-        <Flex gap={"small"}>
-          <Input fluid/>
-          <Button onClick={sendMsg}>Send</Button>
-        </Flex>
       </Flex>
     </Provider>
   );
