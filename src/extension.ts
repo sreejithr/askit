@@ -29,6 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
 			selectedAuthors = authorNodes.filter(author => author.status === true);
 		}
+		const selectedText = await AuthorModelService.getInstance().selectedText;
 		// Display a message box to the user
 		const panel = vscode.window.createWebviewPanel(
 			"chatPanel",

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import dedent from 'ts-dedent';
 import { IDisposable, AuthorData } from '../explorer/types';
 import { GitBlame } from '../gitblame';
 
@@ -19,6 +20,7 @@ export class AuthorModelService {
     private static instance: AuthorModelService;
     private readonly _onDidAuthorModelChange: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
     private disposables: IDisposable[] = [];
+    public _selectedText: string = '';
     public authorsList: AuthorData[] = [];
     public registerHandlers() {
         this.disposables.push(vscode.window.onDidChangeActiveTextEditor(this.updateModel, this));
@@ -32,6 +34,10 @@ export class AuthorModelService {
 
     public get onDidAuthorModelChange(): vscode.Event<void> {
         return this._onDidAuthorModelChange.event;
+    }
+
+    public get selectedText(): string {
+        return this._selectedText;
     }
 
     private updateModel() {
@@ -93,7 +99,7 @@ export class AuthorModelService {
         });
     }
 
-    private getLineNumberRange(editor: vscode.TextEditor | undefined) {
+    private getLineNumberRange(editor: vscode.TextEditor | undefined): number[] | undefined {
         if (!editor) {
             return;
         }
@@ -104,9 +110,17 @@ export class AuthorModelService {
         if (doc.isUntitled) {
             return;
         }
-        const start = editor.selections[0].start.line + 1;
-        const end = editor.selections[0].end.line + 1;
+        let startPosition = editor.selections[0].start;
+        let endPosition = editor.selections[0].end;
+        if (startPosition.line === endPosition.line) {
+            this._selectedText = editor.document.lineAt(startPosition).text;
+        } else {
+            const range = new vscode.Range(startPosition, endPosition);
+            this._selectedText = editor.document.getText(range);
+        }
+        this._selectedText = dedent(`\n${this._selectedText}`);
+        const start = startPosition.line + 1;
+        const end = endPosition.line + 1;
         return [start, end];
     }
-
 }
