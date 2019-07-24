@@ -16,10 +16,6 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			},
-			{
 				"command": "askIt.chat",
 				"title": "Chat with authors of the selected code",
 				"category": "AskIt",
@@ -42,7 +38,7 @@
 			"activitybar": [
 				{
 					"id": "chat-explorer",
-					"title": "TEAMS CHAT",
+					"title": "Teams Chat",
 					"icon": "resources/MS_Teams.svg"
 				}
 			]
@@ -74,11 +70,15 @@
 		"mocha": "^6.1.4",
 		"moment": "^2.10.6",
 		"path": "^0.12.7",
+		"simple-git": "^1.122.0",
 		"ts-dedent": "^1.0.0",
 		"tslint": "^5.12.1",
 		"typescript": "^3.3.1",
-		"vscode": "0.11.x",
-		"vscode-test": "^1.0.0-next.0",
-		"simple-git": "^1.122.0"
+		"vscode": "^1.1.35",
+		"vscode-test": "^1.0.0-next.0"
+	},
+	"dependencies": {
+		"cross-env": "^5.2.0",
+		"vsce": "^1.66.0"
 	}
 }
