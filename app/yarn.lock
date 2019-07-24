@@ -1417,7 +1417,7 @@
     apollo-client "^2.2.0"
     apollo-link "^1.2.3"
 
-"@msteams/data-schema@^1.64.0":
+"@msteams/data-schema@^1.64.0", "@msteams/data-schema@^1.64.3194035":
   version "1.64.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/data-schema/-/data-schema-1.64.3194035.tgz#8f0ccc0c321e346c7423e67090840f2ecaa0224a"
   dependencies:
@@ -1526,7 +1526,7 @@
     "@msteams/services-utilities" "^2.1.0"
     rxjs "^6.1.0"
 
-"@msteams/services-auth@^2.0.0":
+"@msteams/services-auth@^2.0.0", "@msteams/services-auth@^2.0.3194035":
   version "2.0.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-auth/-/services-auth-2.0.3194035.tgz#e19dbc350cadcb188933147e294cbee3de7011e1"
   dependencies:
@@ -1594,7 +1594,7 @@
   version "1.0.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-constants/-/services-constants-1.0.3194035.tgz#d68fd166e46a92395c631d63fa884e7f9fc4851c"
 
-"@msteams/services-core-common@^2.0.0":
+"@msteams/services-core-common@^2.0.0", "@msteams/services-core-common@^2.0.3194035":
   version "2.0.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-core-common/-/services-core-common-2.0.3194035.tgz#462f2570ceb7720115b2df336042f50e45ef7697"
   dependencies:
@@ -1810,7 +1810,7 @@
   version "1.1.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-scenario/-/services-scenario-1.1.3194035.tgz#21638e65b46c62254d9671d7d5e6cbc26ee2849c"
 
-"@msteams/services-settings@^2.1.0":
+"@msteams/services-settings@^2.1.0", "@msteams/services-settings@^2.1.3194035":
   version "2.1.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-settings/-/services-settings-2.1.3194035.tgz#0f77fecb957b05fbdbf65fc1edd7a22e080bf09f"
   dependencies:
@@ -1855,7 +1855,7 @@
     "@msteams/services-core-common" "^2.0.0"
     "@msteams/services-logger-interface" "^2.0.0"
 
-"@msteams/services-telemetry@^3.0.0":
+"@msteams/services-telemetry@^3.0.0", "@msteams/services-telemetry@^3.0.3194035":
   version "3.0.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-telemetry/-/services-telemetry-3.0.3194035.tgz#0244d665853c282187b1b14a9a9156c7a1897557"
   dependencies:
@@ -1876,7 +1876,7 @@
     lodash "^4.17.10"
     uuid "^3.2.1"
 
-"@msteams/services-transport@^2.0.0":
+"@msteams/services-transport@^2.0.0", "@msteams/services-transport@^2.0.3194035":
   version "2.0.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-transport/-/services-transport-2.0.3194035.tgz#af2838b9592fc2fe12b849fa7471b0703a5bed0b"
   dependencies:
@@ -1995,6 +1995,13 @@
     prop-types "^15.6.1"
     tslib "^1.9.3"
 
+"@stardust-ui/react-component-event-listener@^0.34.0":
+  version "0.34.0"
+  resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/@stardust-ui/react-component-event-listener/-/react-component-event-listener-0.34.0.tgz#a09370f6673f57ee7e41138ddbada72407b80819"
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    prop-types "^15.6.1"
+
 "@stardust-ui/react-component-nesting-registry@^0.32.1-rc1":
   version "0.32.1-rc1"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/@stardust-ui/react-component-nesting-registry/-/react-component-nesting-registry-0.32.1-rc1.tgz#6bb70956421f047f5a5cb97faa7d957272b4ca50"
@@ -2002,11 +2009,27 @@
     prop-types "^15.6.1"
     tslib "^1.9.3"
 
+"@stardust-ui/react-component-nesting-registry@^0.34.0":
+  version "0.34.0"
+  resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/@stardust-ui/react-component-nesting-registry/-/react-component-nesting-registry-0.34.0.tgz#d92e8376d7e3f1627cede09c9f4fcb3a9c2e3ba3"
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    prop-types "^15.6.1"
+
 "@stardust-ui/react-component-ref@^0.32.1-rc1":
   version "0.32.1-rc1"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/@stardust-ui/react-component-ref/-/react-component-ref-0.32.1-rc1.tgz#d9e7c5261309b26ab1273665d7bd428b7288dbfe"
   dependencies:
     "@stardust-ui/react-proptypes" "^0.32.1-rc1"
+    prop-types "^15.6.1"
+    react-is "^16.6.3"
+
+"@stardust-ui/react-component-ref@^0.34.0":
+  version "0.34.0"
+  resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/@stardust-ui/react-component-ref/-/react-component-ref-0.34.0.tgz#9c90d700b86b68a367aba23fba538a4fb0b3023e"
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    "@stardust-ui/react-proptypes" "^0.34.0"
     prop-types "^15.6.1"
     react-is "^16.6.3"
 
@@ -2017,6 +2040,14 @@
     lodash "^4.17.11"
     prop-types "^15.6.1"
     tslib "^1.9.3"
+
+"@stardust-ui/react-proptypes@^0.34.0":
+  version "0.34.0"
+  resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/@stardust-ui/react-proptypes/-/react-proptypes-0.34.0.tgz#19c624f3fe3af369375424a0fb0bec155f5a6d4b"
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    lodash "^4.17.11"
+    prop-types "^15.6.1"
 
 "@stardust-ui/react@0.32.1-rc1":
   version "0.32.1-rc1"
@@ -2043,6 +2074,31 @@
     react-fela "^10.2.0"
     react-is "^16.6.3"
     tslib "^1.9.3"
+
+"@stardust-ui/react@^0.34.2":
+  version "0.34.2"
+  resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/@stardust-ui/react/-/react-0.34.2.tgz#b5f4948f3b01bc15ce9b03b68bf074f0d81e4126"
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    "@stardust-ui/react-component-event-listener" "^0.34.0"
+    "@stardust-ui/react-component-nesting-registry" "^0.34.0"
+    "@stardust-ui/react-component-ref" "^0.34.0"
+    "@stardust-ui/react-proptypes" "^0.34.0"
+    classnames "^2.2.5"
+    downshift "^3.2.10"
+    fast-memoize "^2.5.1"
+    fela "^10.5.0"
+    fela-plugin-embedded "^10.5.0"
+    fela-plugin-fallback-value "^10.5.0"
+    fela-plugin-placeholder-prefixer "^10.5.0"
+    fela-plugin-prefixer "^10.5.0"
+    fela-plugin-rtl "^10.5.0"
+    keyboard-key "^1.0.1"
+    lodash "^4.17.11"
+    popper.js "^1.15.0"
+    prop-types "^15.6.1"
+    react-fela "^10.5.0"
+    react-is "^16.6.3"
 
 "@svgr/babel-plugin-add-jsx-attribute@^4.0.0":
   version "4.0.0"
@@ -4786,6 +4842,13 @@ fela-plugin-custom-property@^10.5.0:
     css-in-js-utils "^3.0.0"
     isobject "^3.0.1"
 
+fela-plugin-embedded@^10.5.0:
+  version "10.5.0"
+  resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/fela-plugin-embedded/-/fela-plugin-embedded-10.5.0.tgz#b97b9e200479dd5907ef208f7ace3896ccc0c8e7"
+  dependencies:
+    fast-loops "^1.0.0"
+    isobject "^3.0.1"
+
 fela-plugin-fallback-value@^10.2.0, fela-plugin-fallback-value@^10.5.0:
   version "10.5.0"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/fela-plugin-fallback-value/-/fela-plugin-fallback-value-10.5.0.tgz#829be50180f7d2da8d76cf99811a919a458a22da"
@@ -4793,14 +4856,14 @@ fela-plugin-fallback-value@^10.2.0, fela-plugin-fallback-value@^10.5.0:
     css-in-js-utils "^3.0.0"
     isobject "^3.0.1"
 
-fela-plugin-placeholder-prefixer@^10.2.0:
+fela-plugin-placeholder-prefixer@^10.2.0, fela-plugin-placeholder-prefixer@^10.5.0:
   version "10.5.0"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/fela-plugin-placeholder-prefixer/-/fela-plugin-placeholder-prefixer-10.5.0.tgz#561983ab3422228b75e873d237eeaffac8c7523a"
   dependencies:
     fast-loops "^1.0.0"
     fela-plugin-custom-property "^10.5.0"
 
-fela-plugin-prefixer@^10.2.0:
+fela-plugin-prefixer@^10.2.0, fela-plugin-prefixer@^10.5.0:
   version "10.5.0"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/fela-plugin-prefixer/-/fela-plugin-prefixer-10.5.0.tgz#3bf383fa4829bb6afe0d91ca2c16677520571251"
   dependencies:
@@ -4810,7 +4873,7 @@ fela-plugin-prefixer@^10.2.0:
     inline-style-prefixer "^5.0.1"
     isobject "^3.0.1"
 
-fela-plugin-rtl@^10.2.0:
+fela-plugin-rtl@^10.2.0, fela-plugin-rtl@^10.5.0:
   version "10.5.0"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/fela-plugin-rtl/-/fela-plugin-rtl-10.5.0.tgz#a4ccb51e0ce6504fe7ea705b23d89ca7f0423244"
   dependencies:
@@ -5349,7 +5412,7 @@ hex-color-regex@^1.0.1, hex-color-regex@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
 
-history@^4.7.2:
+history@^4.7.2, history@^4.9.0:
   version "4.9.0"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/history/-/history-4.9.0.tgz#84587c2068039ead8af769e9d6a6860a14fa1bca"
   dependencies:
@@ -8563,7 +8626,7 @@ react-error-overlay@^5.1.6:
   version "5.1.6"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.6.tgz#0cd73407c5d141f9638ae1e0c63e7b2bf7e9929d"
 
-react-fela@^10.2.0:
+react-fela@^10.2.0, react-fela@^10.5.0:
   version "10.5.0"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/npm-mirror/npm/registry/react-fela/-/react-fela-10.5.0.tgz#0196f138bc1f5478767fa1e5b6f1d2bbd136f38c"
   dependencies:

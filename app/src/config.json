@@ -1,0 +1,130 @@
+{
+  "clientId": "5e3ce6c0-2b1f-4285-8d4b-75ee78787346",
+  "basePath": "multi-window",
+  "ecsExperienceName": "multi-window",
+  "fallbackLocale": "en-us",
+  "webAuth": {
+    "cacheLocation": "localStorage",
+    "navigateToLoginRequestUrl": true,
+    "top": {
+      "popUp": true
+    },
+    "iframe": {
+      "redirectPath": "auth"
+    }
+  },
+  "loggingConstants": {
+    "appTokens": {
+      "default": "bc3902d8132f43e3ae086a009979fa88-632130b2-9455-44a6-80e2-d7457b6eb8ca-7193",
+      "userBi": "d28015128fd944c7a95986a03dce65b1-99e30f36-0a9e-43e3-a591-32de4791e10f-6478",
+      "test": "0b15014f683e4999989a5e66bc942700-51caff43-39b8-4cc9-a7d5-fcbf318ce0c2-6867"
+    },
+    "silent": false,
+    "telemetryserver": "https://teams.microsoft.com/data/"
+  },
+  "ring": {
+    "id": "ring0"
+  },
+  "cdnVersion": 4,
+  "enableDevTools": true,
+  "windowType": "MW",
+  "experienceId": 3,
+  "dataLayerSettings": {
+    "currentVersion": 10,
+    "stableFieldResolvers": {
+      "query": [
+        "deviceList",
+        "presence",
+        "messages",
+        "callDesktopPreviews",
+        "callWindowPreviews",
+        "callScreenPreviews",
+        "call",
+        "conversationForCall",
+        "callPptFiles",
+        "callStartTimestamp",
+        "callingAlerts",
+        "peopleCache",
+        "people",
+        "searchUsers",
+        "user",
+        "callQuestionnaire",
+        "callMeetingInfo",
+        "meetingInfoFromCall",
+        "meetingJoinInfoHtml",
+        "meetingInfoFromExchange",
+        "suggestedUsers",
+        "threadMembers",
+        "callingIntent"
+      ],
+      "mutation": [
+        "startCall",
+        "stopCall",
+        "toggleHoldCall",
+        "rejoinCall",
+        "retryCall",
+        "cancelRetry",
+        "toggleMute",
+        "toggleRaiseHands",
+        "toggleVideo",
+        "startLocalStream",
+        "startStream",
+        "stopStream",
+        "log",
+        "setVideoPreference",
+        "setIgnoreMirroring",
+        "videoSizeChanged",
+        "muteParticipant1",
+        "muteAllParticipants1",
+        "removeParticipant1",
+        "addParticipant1",
+        "admitParticipant1",
+        "admitAllParticipants1",
+        "selectDevice",
+        "selectAudioDevice",
+        "actionOnAlert",
+        "dismissAlert",
+        "subscribePresence",
+        "unsubscribePresence",
+        "startSharing",
+        "startSharingFromChat",
+        "sendMessage",
+        "stopSharing",
+        "submitCallFeedback",
+        "cancelCallFeedback",
+        "callPptSharingTogglePrivateViewing",
+        "callPptSharingStopContentSharing",
+        "callPptSharingChangeSlide",
+        "callPptSharingTakeControl",
+        "startFileSharing",
+        "updateLayoutToggleState",
+        "startRecording",
+        "stopRecording",
+        "fireCallingIntent",
+        "joinCallFromIntent"
+      ],
+      "subscription": [
+        "callingServiceEvent",
+        "callParticipantAddedEvent",
+        "callParticipantRemovedEvent",
+        "callParticipantUpdatedEvent",
+        "callPptSharingAddedEvent",
+        "callPptSharingStartedEvent",
+        "callPptSharingStartFailedEvent",
+        "callPptSharingRemovedEvent",
+        "callPptSharingSlideChangedEvent",
+        "callRecordingStateChangedEvent",
+        "callTitleChangedEvent",
+        "presenceUpdateEvent",
+        "chatServiceEvent",
+        "callPptSharingPrivateViewingChangedEvent",
+        "callPptSharingContentSharingStatusChangedEvent",
+        "callLayoutChangedEvent",
+        "callingPoliciesChangedEvent",
+        "hasOngoingCallsChangedEvent"
+      ]
+    }
+  },
+  "lpcRegion": "df",
+  "isLPCEnabled": true
+}
