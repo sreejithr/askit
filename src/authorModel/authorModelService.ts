@@ -8,6 +8,7 @@ import { IDisposable, AuthorData } from '../explorer/types';
 import { GitBlame } from '../gitblame';
 
 const gitBlameShell = require('git-blame');
+const simpleGit = require('simple-git');
 
 export class AuthorModelService {
     public static getInstance(): AuthorModelService {
@@ -20,7 +21,8 @@ export class AuthorModelService {
     private static instance: AuthorModelService;
     private readonly _onDidAuthorModelChange: vscode.EventEmitter<void> = new vscode.EventEmitter<void>();
     private disposables: IDisposable[] = [];
-    public _selectedText: string = '';
+    private _selectedText: string = '';
+    private _linkToSelectedText: string = '';
     public authorsList: AuthorData[] = [];
     public registerHandlers() {
         this.disposables.push(vscode.window.onDidChangeActiveTextEditor(this.updateModel, this));
@@ -40,24 +42,28 @@ export class AuthorModelService {
         return this._selectedText;
     }
 
-    private updateModel() {
+    public get linkToSelectedText(): string {
+        return this._linkToSelectedText;
+    }
+
+    private async updateModel() {
         // Workspace not using a folder. No access to git repo.
         if (!vscode.workspace.rootPath) {
             return;
         }
         const workspaceRoot = vscode.workspace.rootPath;
-        this.fetchDataAndUpdate(workspaceRoot);
+        await this.fetchDataAndUpdate(workspaceRoot);
     }
 
-    private fetchDataAndUpdate(repoDir: string) {
+    private async fetchDataAndUpdate(repoDir: string): Promise<void> {
         const repoPath = path.join(repoDir, '.git');
 
-        fs.access(repoPath, (err) => {
+        fs.access(repoPath, async (err) => {
             if (err) {
                 // No access to git repo or no repo, try to go up.
                 const parentDir = path.dirname(repoDir);
                 if (parentDir !== repoDir) {
-                    this.fetchDataAndUpdate(parentDir);
+                    await this.fetchDataAndUpdate(parentDir);
                 }
             }
             else {
@@ -70,7 +76,7 @@ export class AuthorModelService {
                 }
                 const gitBlame = new GitBlame(repoPath, gitBlameShell);
                 const file = path.relative(repoDir, editor!.document.fileName);
-
+                await this.populateLinkToSelectedText(repoDir, file, lineRange);
                 gitBlame.getBlameInfo(file).then((info) => {
                     this.authorsList = [];
                     for (const lineNumber in info['lines']) {
@@ -122,5 +128,31 @@ export class AuthorModelService {
         const start = startPosition.line + 1;
         const end = endPosition.line + 1;
         return [start, end];
+    }
+
+    private async populateLinkToSelectedText(repoDir: string, file:string, lineRange: number[]){
+        let remoteURL = await this.getRemoteURL(repoDir);
+        if (remoteURL !== '') {
+            const relativeFilePath = file.replace(/\\/g, '/');
+            remoteURL = remoteURL.slice(0, -5);  // Remove trailing string '.git'
+            if (remoteURL.includes('github.com/')) {
+                this._linkToSelectedText = `${remoteURL}/blob/master/${relativeFilePath}#L${lineRange[0]}`;
+            } else if (remoteURL.includes('bitbucket.org/')) {
+                remoteURL = remoteURL.slice(0, -5); 
+                this._linkToSelectedText = `${remoteURL}/src/master/${relativeFilePath}`;
+            }
+        }
+    }
+
+    public async getRemoteURL(repoDir: string): Promise<string> {
+        return new Promise<string>((resolve) => {
+            simpleGit(repoDir)
+            .listRemote(['--get-url'], (err: any, remoteUrl: string) => {
+                if (err) {
+                    resolve('');
+                }
+                resolve(remoteUrl);
+            });
+        });
     }
 }
