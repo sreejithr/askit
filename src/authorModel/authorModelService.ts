@@ -212,7 +212,7 @@ export class AuthorModelService {
                     'config',
                     'user.name'
                 ], (err: any, result: string) => {
-                    if (err) {
+                    if (err || !result) {
                         resolve();
                     }
                     this._userName = result.slice(0, -1);
@@ -228,7 +228,7 @@ export class AuthorModelService {
                     'config',
                     'user.email'
                 ], (err: any, result: string) => {
-                    if (err) {
+                    if (err || !result) {
                         resolve();
                     }
                     this._userEmail = result.slice(0, -1);
