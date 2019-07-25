@@ -56,6 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}],
 			}
 		);
+		console.log(JSON.stringify(selectedUpns));
 		panel.webview.html = webViewContent(JSON.stringify(selectedUpns));
 	});
 
