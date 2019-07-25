@@ -29,11 +29,15 @@ export function activate(context: vscode.ExtensionContext) {
 			const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
 			selectedAuthors = authorNodes.filter(author => author.status === true);
 		}
-		const selectedText = AuthorModelService.getInstance().selectedText;
-		const linkToSelectedText = AuthorModelService.getInstance().linkToSelectedText;
+		const authorModelService = AuthorModelService.getInstance();
+		if (authorModelService.isFetchComplete === false && vscode.window.activeTextEditor) {
+			await authorModelService.fetchInfo(vscode.window.activeTextEditor, authorModelService.repoDir, authorModelService.file, authorModelService.lineRange);
+		}
+		const selectedText = authorModelService.selectedText;
+		const linkToSelectedText = authorModelService.linkToSelectedText;
 		const user: AuthorData = {
-			name: AuthorModelService.getInstance().userName,
-			email: AuthorModelService.getInstance().userEmail
+			name: authorModelService.userName,
+			email: authorModelService.userEmail
 		};
 		// Display a message box to the user
 		const panel = vscode.window.createWebviewPanel(
