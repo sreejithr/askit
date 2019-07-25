@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import webViewContent from "./getWebView";
 import { AuthorTreeViewProvider } from './explorer/authorTreeViewProvider';
 import { AuthorModelService } from './authorModel/authorModelService';
+import { AuthorData } from './explorer/types';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -15,10 +16,25 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.executeCommand('setContext', 'askItExtensionActivated', true).then(() => { });
 
-	let disposable = vscode.commands.registerCommand('askIt.chat', async () => {
-
-		const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
-		const selectedAuthors = authorNodes.filter(author => author.status === true);
+	let disposable = vscode.commands.registerCommand('askIt.chat', async (authorData: AuthorData | undefined) => {
+		/**
+		 * List of authors for which chat is to be opened. Could be just one author or multiple.
+		 */
+		let selectedAuthors: AuthorData[] = [];
+		if (authorData) {
+			// If `authorData` is provided, we only intend to open chat for this particular author.
+			selectedAuthors.push(authorData);
+		} else {
+			// Chat with authors of the selected code, i.e opening group chat
+			const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
+			selectedAuthors = authorNodes.filter(author => author.status === true);
+		}
+		const selectedText = AuthorModelService.getInstance().selectedText;
+		const linkToSelectedText = AuthorModelService.getInstance().linkToSelectedText;
+		const user: AuthorData = {
+			name: AuthorModelService.getInstance().userName,
+			email: AuthorModelService.getInstance().userEmail
+		};
 		// Display a message box to the user
 		const panel = vscode.window.createWebviewPanel(
 			"chatPanel",
