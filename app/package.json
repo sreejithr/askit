@@ -8,6 +8,7 @@
     "@msteams/services-auth": "^2.0.3194035",
     "@msteams/services-chat": "^3.0.3194035",
     "@msteams/services-core-common": "^2.0.3194035",
+    "@msteams/services-people": "^2.0.3201346",
     "@msteams/services-settings": "^2.1.3194035",
     "@msteams/services-telemetry": "^3.0.3194035",
     "@msteams/services-transport": "^2.0.3194035",

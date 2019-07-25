@@ -3,54 +3,6 @@ import './App.css';
 import { Chat, Avatar, Provider, themes, Flex  } from "@stardust-ui/react";
 import { getServices } from "./getServices";
 
-const items = [
-  {
-    attached: 'top',
-    contentPosition: 'end',
-    message: {
-      content: (
-        <Chat.Message
-          content="Hello"
-          author="John Doe"
-          timestamp="Yesterday, 10:15 PM"
-          mine
-        />
-      ),
-    },
-    key: 'message-1',
-  },
-  {
-    attached: 'bottom',
-    contentPosition: 'end',
-    key: 'message-2',
-    message: {
-      content: (
-        <Chat.Message
-          content="I'm back!"
-          author="John Doe"
-          timestamp="Yesterday, 10:15 PM"
-          mine
-        />
-      ),
-    },
-  },
-  {
-    gutter: {
-      content: <Avatar image="https://stardust-ui.github.io/react/public/images/avatar/small/ade.jpg" />,
-    },
-    message: {
-      content: (
-        <Chat.Message
-          content="Hi"
-          author="Jane Doe"
-          timestamp="Yesterday, 10:15 PM"
-        />
-      ),
-    },
-    key: 'message-3',
-  },
-];
-
 function generateMessage(text) {
   return {
     messagetype: "RichText/Html",
@@ -67,27 +19,83 @@ function generateMessage(text) {
   }
 }
 
-function App() {
-  const convId = "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces";
-  const { chatService } = getServices();
-  
-  const onPostMessage = event => sendMessage(event.data);
-  const sendMessage = messageText => chatService.postMessageToConversation(convId, generateMessage(messageText));
+export class App extends React.Component {
+  services = getServices();
+  convId = "";
 
-  if (window.addEventListener) {
-    window.addEventListener("message", onPostMessage, false);
-  } else {
-    window.attachEvent("onmessage", onPostMessage);
+  constructor(props) {
+    super(props);
+    if (window.addEventListener) {
+      window.addEventListener("message", this.onPostMessage, false);
+    } else {
+      window.attachEvent("onmessage", this.onPostMessage);
+    }
+    // first upn will be self
+    const selectedUpns = JSON.parse(window.location.href.split("#/")[1]);
+    const selectedMris = this.getMrisFromUpns(selectedUpns);
+    this.convId = this.getConversationId(selectedMris);
+    // this.convId = "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces";
+  };
+
+  componentDidMount() {
+
   }
-  return (
-    <Provider theme={themes.teamsDark}>
-      <Flex column style={{ height: '95vh', width: '93vw' }}>
-        <Flex.Item grow>
-          <Chat items={items} />
-        </Flex.Item>
-      </Flex>
-    </Provider>
-  );
+
+  render() {
+    return (
+      <Provider theme={themes.teamsDark}>
+        <Flex column style={{ height: '95vh', width: '93vw' }}>
+          <Flex.Item grow>
+            <Chat items={items} />
+          </Flex.Item>
+        </Flex>
+      </Provider>
+    );
+  }
+
+  onPostMessage = (event) => {
+    this.sendMessage(event.data);
+  }
+
+
+  sendMessage = (messageText) => {
+    const {chatService} = this.services;
+    chatService.postMessageToConversation(this.convId, generateMessage(messageText));
+  }
+
+  getConversationId = (selectedMris) => {
+    // when only your email id is present
+    if(selectedMris.length === 1) {
+      return "";
+    }
+    // when the conversation is 1:1
+    if(selectedMris.length === 2) {
+      this.chatIdFromMembers(selectedMris[0],selectedMris[1]);
+    }
+  }
+  userIdForChatFromMRI = (mri) => {
+    return mri.slice(mri.includes("_") ? 41 : 8);
+  };
+  /**
+   * Construct 1:1 chat ID given MRIs of participants
+   */
+  chatIdFromMembers = (userId1, userId2) => {
+    const members = [
+      this.userIdForChatFromMRI(userId1),
+      this.userIdForChatFromMRI(userId2)
+    ].sort();
+    return `19:${members[0]}_${members[1]}@unq.gbl.spaces`;
+  };
+
+  getMrisFromUpns = (selectedUpns) => {
+    const profiles = this.services.peopleService.getPeopleProfilesByEmails(selectedUpns);
+    const mris = profiles.map((profile) => {
+      return profile.mri;
+    });
+    return mris;
+  }
+
+
 }
 
 export default App;

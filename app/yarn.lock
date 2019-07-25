@@ -1778,6 +1778,21 @@
     blob-util "^2.0.2"
     lodash "^4.17.10"
 
+"@msteams/services-people@^2.0.3201346":
+  version "2.0.3201346"
+  resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-people/-/services-people-2.0.3201346.tgz#fae25dfd0c83e68c5e0b2e47e185d0728b3298cf"
+  dependencies:
+    "@msteams/data-schema" "^1.64.0"
+    "@msteams/services-core-common" "^2.0.0"
+    "@msteams/services-settings" "^2.1.0"
+    "@msteams/services-telemetry" "^3.0.0"
+    "@msteams/services-utilities-batch-queue" "^1.0.0"
+    "@msteams/services-utilities-date" "^1.2.0"
+    "@msteams/services-utilities-error" "^1.1.0"
+    "@msteams/services-utilities-pstn" "^1.0.0"
+    blob-util "^2.0.2"
+    lodash "^4.17.10"
+
 "@msteams/services-presence@^1.1.0":
   version "1.1.3194035"
   resolved "https://domoreexp.pkgs.visualstudio.com/_packaging/msteams/npm/registry/@msteams/services-presence/-/services-presence-1.1.3194035.tgz#b85f3131b822e9bd9c068b05f60a27b251c3c49f"

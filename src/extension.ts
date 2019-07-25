@@ -4,6 +4,8 @@ import * as vscode from 'vscode';
 import webViewContent from "./getWebView";
 import { AuthorTreeViewProvider } from './explorer/authorTreeViewProvider';
 import { AuthorModelService } from './authorModel/authorModelService';
+import * as path from 'path';
+
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -19,6 +21,16 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
 		const selectedAuthors = authorNodes.filter(author => author.status === true);
+		const selectedUpns = selectedAuthors.map((selectedAuthor) => {
+			return selectedAuthor.email;
+		});
+		if (!vscode.workspace.rootPath) {
+            return;
+        }
+		const workspaceRoot = vscode.workspace.rootPath;
+		const repoPath = path.join(workspaceRoot, '.git');
+		const simpleGit = require('simple-git');
+
 		// Display a message box to the user
 		const panel = vscode.window.createWebviewPanel(
 			"chatPanel",
@@ -36,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}],
 			}
 		);
-		panel.webview.html = webViewContent();
+		panel.webview.html = webViewContent(JSON.stringify(selectedUpns));
 	});
 
 	context.subscriptions.push(disposable);

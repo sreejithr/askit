@@ -1,4 +1,4 @@
-const webViewContent = (convId = null) => `
+const webViewContent = (selectedUpns = "[]") => `
 <html>
   <head>
     <style>
@@ -53,11 +53,11 @@ const webViewContent = (convId = null) => `
         function sendMessage() {
           const appFrame = document.getElementById("app-frame").contentWindow;
           const message = document.getElementById("compose-box").value;
-          appFrame.postMessage(message, "http://dev.local:3000");
+          appFrame.postMessage(message, "http://dev.local:3000/#/${selectedUpns}");
         }
       })();
     </script>
-    <iframe id="app-frame" src="http://dev.local:3000/"/>
+    <iframe id="app-frame" src="http://dev.local:3000/#/${selectedUpns}"/>
   </body>
 </html>
 `;
