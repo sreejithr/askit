@@ -89,7 +89,7 @@ class App extends React.Component {
     window.scrollTo(0, document.body.scrollHeight);
   }
 
-  fetchMessages = async (count = 20) => {
+  fetchMessages = async (count = 30) => {
     const { messages } = await this.chatService.getConversationMessages(
       this.convId,
       1,
