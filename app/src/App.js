@@ -111,16 +111,21 @@ class App extends React.Component {
       window.attachEvent("onmessage", this.onPostMessage);
     }
 
-    const { messages } = await this.chatService.getConversationMessages(this.convId);
-    messages.reverse();
-    this.setState({
-      messages: messages
-        .filter(e => e.content.length !== 0)
-        .map(this.convertMessageToChatItem),
-      isLoading: false
-    });
-
+    this.setState({ messages: await this.fetchMessages(), isLoading: false });
     window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  fetchMessages = async (count = 20) => {
+    const { messages } = await this.chatService.getConversationMessages(
+      this.convId,
+      1,
+      null,
+      count
+    );
+    messages.reverse();
+    return messages
+      .filter(e => e.content.length !== 0)
+      .map(this.convertMessageToChatItem);
   }
 
   convertMessageToChatItem = message => {
@@ -188,9 +193,15 @@ class App extends React.Component {
 
   sendMessage = messageText => this.chatService.postMessageToConversation(this.convId, generateMessage(messageText));
 
-  onPostMessage = event => {
-    this.sendMessage(event.data);
-    this.setState({ messages: [...this.state.messages, this.generateFakeMessage(event.data)] });
+  onPostMessage = async (event) => {
+    if (typeof event.data === "string" || event.data instanceof String) {
+      await this.sendMessage(event.data);
+      const messages = await this.fetchMessages(1);
+      if (messages.length > 0) {
+        this.setState({ messages: [...this.state.messages, messages[0]] });
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    }
   }
 
   render() {
