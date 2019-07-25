@@ -54,6 +54,7 @@ const webViewContent = (convId = null) => `
           const appFrame = document.getElementById("app-frame").contentWindow;
           const message = document.getElementById("compose-box").value;
           appFrame.postMessage(message, "http://dev.local:3000");
+          document.getElementById("compose-box").value = "";
         }
       })();
     </script>
