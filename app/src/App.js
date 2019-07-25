@@ -68,32 +68,6 @@ function generateMessage(text) {
   }
 }
 
-// function App() {
-//   const convId = "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces";
-//   const { chatService } = getServices();
-  
-//   const onPostMessage = event => sendMessage(event.data);
-//   const sendMessage = messageText => chatService.postMessageToConversation(convId, generateMessage(messageText));
-
-//   if (window.addEventListener) {
-//     window.addEventListener("message", onPostMessage, false);
-//   } else {
-//     window.attachEvent("onmessage", onPostMessage);
-//   }
-//   const displayButton = false;
-//   return (
-//     <Provider theme={themes.teamsDark}>
-//       <Flex column style={{ height: '95vh', width: '93vw' }}>
-//         <Flex.Item grow>
-//           <Chat items={items} />
-//         </Flex.Item>
-//         <Flex.Item>
-//           { displayButton && <Button onClick={() => sendMessage("Test message")}/> }
-//         </Flex.Item>
-//       </Flex>
-//     </Provider>
-//   );
-// }
 class App extends React.Component {
   chatService = getServices().chatService;
   convId = "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces";
@@ -129,22 +103,24 @@ class App extends React.Component {
   }
 
   convertMessageToChatItem = message => {
-    // Sample message -
-    // clientmessageid: "9077193612436755000"
-    // composetime: "2019-07-24T13:56:57.5440000Z"
-    // content: "<p>[object Object]</p>"
-    // contenttype: "text"
-    // conversationLink: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/conversations/19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces"
-    // conversationid: "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces"
-    // from: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/contacts/8:orgid:a983bee2-f40a-4d95-82f1-d16bdd28e947"
-    // id: "1563976617544"
-    // imdisplayname: 
-    // messagetype: "RichText/Html"
-    // originalarrivaltime: "2019-07-24T13:56:57.5440000Z"
-    // properties: {links: "[]", mentions: "[]", files: "[]"}
-    // sequenceId: 110
-    // type: "Message"
-    // version: "1563976617544"
+    /**
+     * Sample message -
+     * clientmessageid: "9077193612436755000"
+     * composetime: "2019-07-24T13:56:57.5440000Z"
+     * content: "<p>[object Object]</p>"
+     * contenttype: "text"
+     * conversationLink: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/conversations/19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces"
+     * conversationid: "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces"
+     * from: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/contacts/8:orgid:a983bee2-f40a-4d95-82f1-d16bdd28e947"
+     * id: "1563976617544"
+     * imdisplayname: 
+     * messagetype: "RichText/Html"
+     * originalarrivaltime: "2019-07-24T13:56:57.5440000Z"
+     * properties: {links: "[]", mentions: "[]", files: "[]"}
+     * sequenceId: 110
+     * type: "Message"
+     * version: "1563976617544"
+     */
     return {
       attached: 'top',
       contentPosition: message.imdisplayname === this.myName ? "end" : "start",
@@ -171,25 +147,23 @@ class App extends React.Component {
     };
   }
 
-  generateFakeMessage = messageText => {
-    return {
-      clientmessageid: Math.floor(Math.random() * 10551863936860307670).toString(),
-      composetime: moment().format("dddd, MMMM Do YYYY, h:mm a"),
-      content: messageText,
-      contenttype: "text",
-      conversationLink: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/conversations/19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces",
-      conversationid: "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces",
-      from: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/contacts/8:orgid:a983bee2-f40a-4d95-82f1-d16bdd28e947",
-      id: "1563976617544",
-      imdisplayname: "Sreejith Ramakrishnan",
-      messagetype: "RichText/Html",
-      originalarrivaltime: "2019-07-24T13:56:57.5440000Z",
-      properties: {links: "[]", mentions: "[]", files: "[]"},
-      sequenceId: 110,
-      type: "Message",
-      version: "1563976617544"
-    }
-  }
+  generateFakeMessage = messageText => ({
+    clientmessageid: Math.floor(Math.random() * 10551863936860307670).toString(),
+    composetime: moment().format("dddd, MMMM Do YYYY, h:mm a"),
+    content: messageText,
+    contenttype: "text",
+    conversationLink: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/conversations/19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces",
+    conversationid: "19:73e506a0-b9a6-404d-80c4-07058252ce2b_a983bee2-f40a-4d95-82f1-d16bdd28e947@unq.gbl.spaces",
+    from: "https://bl2pv2.ng.msg.teams.microsoft.com/v1/users/ME/contacts/8:orgid:a983bee2-f40a-4d95-82f1-d16bdd28e947",
+    id: "1563976617544",
+    imdisplayname: "Sreejith Ramakrishnan",
+    messagetype: "RichText/Html",
+    originalarrivaltime: "2019-07-24T13:56:57.5440000Z",
+    properties: {links: "[]", mentions: "[]", files: "[]"},
+    sequenceId: 110,
+    type: "Message",
+    version: "1563976617544"
+  });
 
   sendMessage = messageText => this.chatService.postMessageToConversation(this.convId, generateMessage(messageText));
 
@@ -207,7 +181,7 @@ class App extends React.Component {
   render() {
     const { messages } = this.state;
     // const displayButton = true;
-    if(this.state.isLoading) {
+    if (this.state.isLoading) {
       return (
         <Provider theme={themes.teamsDark}>
           <Flex column style={{ height: '95vh', width: '93vw', justifyContent: 'center', alignItems: 'center' }} >
