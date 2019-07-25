@@ -24,6 +24,8 @@ export class AuthorModelService {
     private _selectedText: string = '';
     private _linkToSelectedText: string = '';
     private gitRepo = {};
+    private _userName = '';
+    private _userEmail = '';
     public authorsList: AuthorData[] = [];
     public registerHandlers() {
         this.disposables.push(vscode.window.onDidChangeActiveTextEditor(this.updateModel, this));
@@ -45,6 +47,14 @@ export class AuthorModelService {
 
     public get linkToSelectedText(): string {
         return this._linkToSelectedText;
+    }
+
+    public get userName(): string {
+        return this._userName;
+    }
+
+    public get userEmail(): string {
+        return this._userEmail;
     }
 
     private async updateModel() {
@@ -89,6 +99,8 @@ export class AuthorModelService {
                 (this.gitRepo as any)[fileName] = repoDir;
                 const file = path.relative(repoDir, editor!.document.fileName);
                 await this.populateLinkToSelectedText(repoDir, file, lineRange);
+                this._userName = await this.getUserName(repoDir);
+                this._userEmail = await this.getUserEmail(repoDir);
                 gitBlame.getBlameInfo(file).then((info) => {
                     this.authorsList = [];
                     for (const lineNumber in info['lines']) {
@@ -164,6 +176,36 @@ export class AuthorModelService {
                         resolve('');
                     }
                     resolve(remoteUrl);
+                });
+        });
+    }
+
+    public async getUserName(repoDir: string) {
+        return new Promise<string>((resolve) => {
+            simpleGit(repoDir).raw(
+                [
+                    'config',
+                    'user.name'
+                ], (err: any, result: string) => {
+                    if (err) {
+                        resolve('');
+                    }
+                    resolve(result.slice(0, -1));
+                });
+        });
+    }
+
+    public async getUserEmail(repoDir: string) {
+        return new Promise<string>((resolve) => {
+            simpleGit(repoDir).raw(
+                [
+                    'config',
+                    'user.email'
+                ], (err: any, result: string) => {
+                    if (err) {
+                        resolve('');
+                    }
+                    resolve(result.slice(0, -1));
                 });
         });
     }
