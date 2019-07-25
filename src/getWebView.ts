@@ -54,6 +54,7 @@ const webViewContent = (selectedUpns = "[]") => `
           const appFrame = document.getElementById("app-frame").contentWindow;
           const message = document.getElementById("compose-box").value;
           appFrame.postMessage(message, "http://dev.local:3000/#/${selectedUpns}");
+          document.getElementById("compose-box").value = "";
         }
       })();
     </script>
