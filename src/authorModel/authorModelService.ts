@@ -26,6 +26,10 @@ export class AuthorModelService {
     private gitRepo = {};
     private _userName = '';
     private _userEmail = '';
+    private _repoDir = '';
+    private _file = '';
+    private _lineRange = [-1, -1];
+    private _isFetchComplete = false;
     public authorsList: AuthorData[] = [];
     public registerHandlers() {
         this.disposables.push(vscode.window.onDidChangeActiveTextEditor(this.updateModel, this));
@@ -39,6 +43,22 @@ export class AuthorModelService {
 
     public get onDidAuthorModelChange(): vscode.Event<void> {
         return this._onDidAuthorModelChange.event;
+    }
+
+    public get isFetchComplete(): boolean {
+        return this._isFetchComplete;
+    }
+
+    public get repoDir(): string {
+        return this._repoDir;
+    }
+
+    public get file(): string {
+        return this._file;
+    }
+
+    public get lineRange(): number[] {
+        return this._lineRange;
     }
 
     public get selectedText(): string {
@@ -94,13 +114,13 @@ export class AuthorModelService {
                     this._onDidAuthorModelChange.fire();
                     return;
                 }
+                this._isFetchComplete = false;
                 const gitBlame = new GitBlame(repoPath, gitBlameShell);
                 const fileName = editor!.document.fileName;
-                (this.gitRepo as any)[fileName] = repoDir;
+                (this.gitRepo as any)[fileName] = this._repoDir = repoDir;
                 const file = path.relative(repoDir, editor!.document.fileName);
-                await this.populateLinkToSelectedText(repoDir, file, lineRange);
-                this._userName = await this.getUserName(repoDir);
-                this._userEmail = await this.getUserEmail(repoDir);
+                this._file = file;
+                this._lineRange = lineRange;
                 gitBlame.getBlameInfo(file).then((info) => {
                     this.authorsList = [];
                     for (const lineNumber in info['lines']) {
@@ -124,6 +144,8 @@ export class AuthorModelService {
                         }
                     }
                     this._onDidAuthorModelChange.fire();
+                    // Fetch additional info in background
+                    this.fetchInfo(editor!, repoDir, file, lineRange).catch(() => { });
                 });
             }
         });
@@ -140,6 +162,12 @@ export class AuthorModelService {
         if (doc.isUntitled) {
             return;
         }
+        const start = editor.selections[0].start.line + 1;
+        const end = editor.selections[0].end.line + 1;
+        return [start, end];
+    }
+
+    public async populateSelectedText(editor: vscode.TextEditor) {
         let startPosition = editor.selections[0].start;
         let endPosition = editor.selections[0].end;
         if (startPosition.line === endPosition.line) {
@@ -149,12 +177,9 @@ export class AuthorModelService {
             this._selectedText = editor.document.getText(range);
         }
         this._selectedText = dedent(`\n${this._selectedText}`);
-        const start = startPosition.line + 1;
-        const end = endPosition.line + 1;
-        return [start, end];
     }
 
-    private async populateLinkToSelectedText(repoDir: string, file: string, lineRange: number[]) {
+    public async populateLinkToSelectedText(repoDir: string, file: string, lineRange: number[]) {
         let remoteURL = await this.getRemoteURL(repoDir);
         if (remoteURL !== '') {
             const relativeFilePath = file.replace(/\\/g, '/');
@@ -181,32 +206,42 @@ export class AuthorModelService {
     }
 
     public async getUserName(repoDir: string) {
-        return new Promise<string>((resolve) => {
+        return new Promise<void>((resolve) => {
             simpleGit(repoDir).raw(
                 [
                     'config',
                     'user.name'
                 ], (err: any, result: string) => {
                     if (err) {
-                        resolve('');
+                        resolve();
                     }
-                    resolve(result.slice(0, -1));
+                    this._userName = result.slice(0, -1);
+                    resolve();
                 });
         });
     }
 
     public async getUserEmail(repoDir: string) {
-        return new Promise<string>((resolve) => {
+        return new Promise<void>((resolve) => {
             simpleGit(repoDir).raw(
                 [
                     'config',
                     'user.email'
                 ], (err: any, result: string) => {
                     if (err) {
-                        resolve('');
+                        resolve();
                     }
-                    resolve(result.slice(0, -1));
+                    this._userEmail = result.slice(0, -1);
+                    resolve();
                 });
         });
+    }
+
+    public async fetchInfo(editor: vscode.TextEditor, repoDir: string, file: string, lineRange: number[]) {
+        await this.populateSelectedText(editor);
+        await this.populateLinkToSelectedText(repoDir, file, lineRange);
+        await this.getUserName(repoDir);
+        await this.getUserEmail(repoDir);
+        this._isFetchComplete = true;
     }
 }

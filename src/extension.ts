@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import webViewContent from "./getWebView";
 import { AuthorTreeViewProvider } from './explorer/authorTreeViewProvider';
 import { AuthorModelService } from './authorModel/authorModelService';
-import { AuthorData } from './explorer/types';
+import { AuthorData, AuthorDataItem } from './explorer/types';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -16,11 +16,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.executeCommand('setContext', 'askItExtensionActivated', true).then(() => { });
 
-	let disposable = vscode.commands.registerCommand('askIt.chat', async (authorData: AuthorData | undefined) => {
+	let disposable = vscode.commands.registerCommand('askIt.chat', async (authorData: AuthorDataItem | undefined) => {
 		/**
 		 * List of authors for which chat is to be opened. Could be just one author or multiple.
 		 */
-		let selectedAuthors: AuthorData[] = [];
+		let selectedAuthors: AuthorDataItem[] = [];
 		if (authorData) {
 			// If `authorData` is provided, we only intend to open chat for this particular author.
 			selectedAuthors.push(authorData);
@@ -29,11 +29,15 @@ export function activate(context: vscode.ExtensionContext) {
 			const authorNodes = await AuthorTreeViewProvider.getInstance().getChildren();
 			selectedAuthors = authorNodes.filter(author => author.status === true);
 		}
-		const selectedText = AuthorModelService.getInstance().selectedText;
-		const linkToSelectedText = AuthorModelService.getInstance().linkToSelectedText;
+		const authorModelService = AuthorModelService.getInstance();
+		if (authorModelService.isFetchComplete === false && vscode.window.activeTextEditor) {
+			await authorModelService.fetchInfo(vscode.window.activeTextEditor, authorModelService.repoDir, authorModelService.file, authorModelService.lineRange);
+		}
+		const selectedText = authorModelService.selectedText;
+		const linkToSelectedText = authorModelService.linkToSelectedText;
 		const user: AuthorData = {
-			name: AuthorModelService.getInstance().userName,
-			email: AuthorModelService.getInstance().userEmail
+			name: authorModelService.userName,
+			email: authorModelService.userEmail
 		};
 		// Display a message box to the user
 		const panel = vscode.window.createWebviewPanel(
