@@ -23,6 +23,7 @@ export class AuthorModelService {
     private disposables: IDisposable[] = [];
     private _selectedText: string = '';
     private _linkToSelectedText: string = '';
+    private gitRepo = {};
     public authorsList: AuthorData[] = [];
     public registerHandlers() {
         this.disposables.push(vscode.window.onDidChangeActiveTextEditor(this.updateModel, this));
@@ -51,8 +52,17 @@ export class AuthorModelService {
         if (!vscode.workspace.rootPath) {
             return;
         }
-        const workspaceRoot = vscode.workspace.rootPath;
-        await this.fetchDataAndUpdate(workspaceRoot);
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+        const fileName = editor.document.fileName;
+        if ((fileName in this.gitRepo)) {
+            await this.fetchDataAndUpdate((this.gitRepo as any)[fileName]);
+        } else {
+            const fileDirectory = path.dirname(editor.document.fileName);
+            await this.fetchDataAndUpdate(fileDirectory);
+        }
     }
 
     private async fetchDataAndUpdate(repoDir: string): Promise<void> {
@@ -75,6 +85,8 @@ export class AuthorModelService {
                     return;
                 }
                 const gitBlame = new GitBlame(repoPath, gitBlameShell);
+                const fileName = editor!.document.fileName;
+                (this.gitRepo as any)[fileName] = repoDir;
                 const file = path.relative(repoDir, editor!.document.fileName);
                 await this.populateLinkToSelectedText(repoDir, file, lineRange);
                 gitBlame.getBlameInfo(file).then((info) => {
@@ -130,7 +142,7 @@ export class AuthorModelService {
         return [start, end];
     }
 
-    private async populateLinkToSelectedText(repoDir: string, file:string, lineRange: number[]){
+    private async populateLinkToSelectedText(repoDir: string, file: string, lineRange: number[]) {
         let remoteURL = await this.getRemoteURL(repoDir);
         if (remoteURL !== '') {
             const relativeFilePath = file.replace(/\\/g, '/');
@@ -138,7 +150,7 @@ export class AuthorModelService {
             if (remoteURL.includes('github.com/')) {
                 this._linkToSelectedText = `${remoteURL}/blob/master/${relativeFilePath}#L${lineRange[0]}`;
             } else if (remoteURL.includes('bitbucket.org/')) {
-                remoteURL = remoteURL.slice(0, -5); 
+                remoteURL = remoteURL.slice(0, -5);
                 this._linkToSelectedText = `${remoteURL}/src/master/${relativeFilePath}`;
             }
         }
@@ -147,12 +159,12 @@ export class AuthorModelService {
     public async getRemoteURL(repoDir: string): Promise<string> {
         return new Promise<string>((resolve) => {
             simpleGit(repoDir)
-            .listRemote(['--get-url'], (err: any, remoteUrl: string) => {
-                if (err) {
-                    resolve('');
-                }
-                resolve(remoteUrl);
-            });
+                .listRemote(['--get-url'], (err: any, remoteUrl: string) => {
+                    if (err) {
+                        resolve('');
+                    }
+                    resolve(remoteUrl);
+                });
         });
     }
 }
