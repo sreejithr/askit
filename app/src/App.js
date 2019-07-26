@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import moment from "moment";
-import { Chat, Avatar, Provider, themes, Flex, Loader } from "@stardust-ui/react";
+import { Chat, Provider, themes, Flex, Loader } from "@stardust-ui/react";
 import { getServices } from "./getServices";
 
 class App extends React.Component {
@@ -35,10 +35,19 @@ class App extends React.Component {
     console.log(this.selfProfile);
     this.selfName = this.selfProfile && this.selfProfile.displayName;
     const selectedMris = await this.getMrisFromUpns(selectedUpns);
-    this.convId = this.getConversationId(selectedMris);
+    this.convId = await this.getConversationId(selectedMris);
 
     this.setState({ messages: await this.fetchMessages(), isLoading: false });
     window.scrollTo(0, document.body.scrollHeight);
+    setInterval(this.fetchMessageAndSetState, 10000);
+  }
+
+  fetchMessageAndSetState = async () => {
+    this.setState({ messages: await this.fetchMessages() })
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.fetchMessageAndSetState);
   }
 
   fetchMessages = async (count = 20) => {
@@ -58,11 +67,11 @@ class App extends React.Component {
     return {
       attached: 'top',
       contentPosition: message.imdisplayname === this.selfName ? "end" : "start",
-      ...(message.imdisplayname !== this.selfName && {
-        gutter: {
-          content: <Avatar image="https://d1qb2nb5cznatu.cloudfront.net/users/2034610-large?1472209180" />
-        }
-      }),
+      // ...(message.imdisplayname !== this.selfName && {
+      //   gutter: {
+      //     content: <Avatar image="https://d1qb2nb5cznatu.cloudfront.net/users/2034610-large?1472209180" />
+      //   }
+      // }),
       message: {
         content: (
           <Chat.Message
@@ -118,7 +127,7 @@ class App extends React.Component {
     );
   }
 
-  getConversationId = (selectedMris) => {
+  getConversationId = async (selectedMris) => {
     // when only your email id is present
     if(selectedMris.length === 1) {
       return "";
@@ -127,6 +136,11 @@ class App extends React.Component {
     if(selectedMris.length === 2) {
       // console.log()
       return this.chatIdFromMembers(selectedMris[0],selectedMris[1]);
+    }
+    else {
+      const chat = await this.services.csaService.getChatWithUsers(selectedMris);
+      console.log(chat);
+      return chat.id;
     }
   }
   userIdForChatFromMRI = (mri) => {
