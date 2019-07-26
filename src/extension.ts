@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// Display a message box to the user
 		const panel = vscode.window.createWebviewPanel(
 			"chatPanel",
-			"Chat",
+			selectedAuthors.map(author => author.name).join(", "),
 			{
 				viewColumn: vscode.ViewColumn.Beside,
 				preserveFocus: true

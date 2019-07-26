@@ -84,6 +84,8 @@ export class AuthorModelService {
         }
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
+            this.authorsList = [];
+            this._onDidAuthorModelChange.fire();
             return;
         }
         const fileName = editor.document.fileName;
@@ -115,7 +117,7 @@ export class AuthorModelService {
                     return;
                 }
                 this._isFetchComplete = false;
-                const gitBlame = new GitBlame(repoPath, gitBlameShell);
+                const gitBlame = GitBlame.getInstance(repoPath, gitBlameShell);
                 const fileName = editor!.document.fileName;
                 (this.gitRepo as any)[fileName] = this._repoDir = repoDir;
                 const file = path.relative(repoDir, editor!.document.fileName);
@@ -198,7 +200,7 @@ export class AuthorModelService {
             simpleGit(repoDir)
                 .listRemote(['--get-url'], (err: any, remoteUrl: string) => {
                     if (err) {
-                        resolve('');
+                        return resolve('');
                     }
                     resolve(remoteUrl);
                 });
@@ -213,7 +215,7 @@ export class AuthorModelService {
                     'user.name'
                 ], (err: any, result: string) => {
                     if (err || !result) {
-                        resolve();
+                        return resolve();
                     }
                     this._userName = result.slice(0, -1);
                     resolve();
@@ -229,7 +231,7 @@ export class AuthorModelService {
                     'user.email'
                 ], (err: any, result: string) => {
                     if (err || !result) {
-                        resolve();
+                        return resolve();
                     }
                     this._userEmail = result.slice(0, -1);
                     resolve();
