@@ -84,6 +84,8 @@ export class AuthorModelService {
         }
         const editor = vscode.window.activeTextEditor;
         if (!editor) {
+            this.authorsList = [];
+            this._onDidAuthorModelChange.fire();
             return;
         }
         const fileName = editor.document.fileName;
