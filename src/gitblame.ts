@@ -1,5 +1,13 @@
 export class GitBlame {
 
+    public static getInstance(repoPath: string, gitBlameProcess: any): GitBlame {
+        if (!this.instance) {
+            this.instance = new GitBlame(repoPath, gitBlameProcess);
+        }
+        return this.instance;
+    }
+
+    private static instance: GitBlame;
     private _blamed: Object;
 
     constructor(private repoPath: string, private gitBlameProcess: any) {
