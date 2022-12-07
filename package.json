@@ -70,7 +70,7 @@
 		"mocha": "^6.1.4",
 		"moment": "^2.10.6",
 		"path": "^0.12.7",
-		"simple-git": "^1.122.0",
+		"simple-git": "^3.15.0",
 		"ts-dedent": "^1.0.0",
 		"tslint": "^5.12.1",
 		"typescript": "^3.3.1",
